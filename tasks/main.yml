@@ -1,0 +1,23 @@
+---
+    # tasks file for cocuhbase-replicate
+
+- name: Create XDCR connection(it is just a setup between source and destination)
+  shell: /opt/couchbase/bin/couchbase-cli xdcr-setup -c {{ source_cluster }} -u Administrator -p {{ xdcr_pass }} --create --xdcr-cluster-name {{ xdcr_name }} --xdcr-hostname {{ destination_cluster }} --xdcr-username Administrator --xdcr-password {{ xdcr_pass }}
+  become: true
+  args:
+    executable: /bin/bash
+  ignore_errors: yes
+
+- name: Create the required bucket in the destination cluster
+  shell: /opt/couchbase/bin/couchbase-cli bucket-create -c {{ destination_cluster }}:8091 --username Administrator --password {{ xdcr_pass }} --bucket {{ destination_xdcr_bucket }} --bucket-type couchbase --bucket-ramsize {{ bucket_ram }} --bucket-replica {{ bucket_replica_count }} --bucket-priority high --bucket-eviction-policy fullEviction 
+  become: true
+  args:
+    executable: /bin/bash
+  ignore_errors: yes
+
+- name: Start replication between source and destination
+  shell: /opt/couchbase/bin/couchbase-cli xdcr-replicate -c {{ source_cluster }} -u Administrator -p {{ xdcr_pass }} --create --xdcr-cluster-name {{ xdcr_name }} --xdcr-from-bucket {{ source_xdcr_bucket }} --xdcr-to-bucket {{ destination_xdcr_bucket }}
+  become: true
+  args:
+    executable: /bin/bash
+  ignore_errors: yes

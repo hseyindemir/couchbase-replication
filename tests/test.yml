@@ -1,0 +1,15 @@
+---
+- hosts: all
+  become: true
+  roles: 
+    - role: couchbase-replicate
+      vars:
+        source_cluster: ip_addr_source
+        destination_cluster: ip_addr_destinatio
+        xdcr_name: 'demo'
+        source_xdcr_bucket: 'source'
+        destination_xdcr_bucket: 'dest'
+        bucket_ram: 128
+        bucket_replica_count: 1
+        xdcr_pass: 'test123'
+        create_bucket_on_destination: 'yes'

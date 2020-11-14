@@ -1,0 +1,12 @@
+---
+# defaults file for couchbase-replicate
+
+source_cluster: 192.168.1.1
+destination_cluster: 192.168.1.2
+xdcr_name: 'demo'
+source_xdcr_bucket: 'beer-sample'
+destination_xdcr_bucket: 'beer-sample'
+bucket_ram: 2048
+bucket_replica_count: 1
+xdcr_pass: 'some_pass'
+create_bucket_on_destination: 'no'
